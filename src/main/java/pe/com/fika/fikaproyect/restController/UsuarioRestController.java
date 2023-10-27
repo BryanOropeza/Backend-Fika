@@ -2,6 +2,7 @@ package pe.com.fika.fikaproyect.restController;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import pe.com.fika.fikaproyect.service.UsuarioService;
 
 @RestController
 @RequestMapping("/usuario")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UsuarioRestController {
     @Autowired
     private UsuarioService servicio;
@@ -38,6 +40,7 @@ public class UsuarioRestController {
     @PostMapping
     public UsuarioDTO add(@RequestBody UsuarioDTO c) {
         return servicio.add(c);
+
     }
 
     @PutMapping("{id}")
