@@ -34,5 +34,4 @@ public class RolEntity implements Serializable {
     private String nombre;
     @Column(name = "est_rol")
     private String estado;
-
 }

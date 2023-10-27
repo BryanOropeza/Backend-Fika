@@ -15,12 +15,12 @@ import pe.com.fika.fikaproyect.model.RolEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@JsonPropertyOrder({ "codigo", "nombre", "correo", "contraseña", "estado", "rolid" })
+@JsonPropertyOrder({ "codigo", "nombre", "correo", "password", "estado", "rol_id" })
 public class UsuarioDTO extends GenericoDTO {
     private String nombre;
     private String correo;
-    private String contraseña;
+    private String password;
     private String estado;
-    private RolEntity rolid;
+    private RolEntity rol_id;
 
 }

@@ -41,7 +41,7 @@ public class CitaEntity implements Serializable {
     private String estado;
 
     @ManyToOne
-    @JoinColumn(name = "id_paciente", nullable = false)
+    @JoinColumn(name = "paciente_id", nullable = false)
     private PacienteEntity pacienteid;
 
     @Column(name = "observaciones")

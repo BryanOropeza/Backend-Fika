@@ -53,6 +53,6 @@ public class PacienteEntity implements Serializable {
     private String observaciones;
 
     @OneToOne
-    @JoinColumn(name = "id_user", nullable = false)
+    @JoinColumn(name = "usuario_id", nullable = false)
     private UsuarioEntity usuario_id;
 }

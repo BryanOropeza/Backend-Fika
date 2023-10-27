@@ -25,20 +25,23 @@ import lombok.NoArgsConstructor;
 @Entity(name = "UsuarioEntity")
 @Table(name = "usuario")
 @EqualsAndHashCode(callSuper = false)
-@JsonPropertyOrder({ "codigo", "nombre", "correo", "contraseña", "estado", "rolid" })
+@JsonPropertyOrder({ "codigo", "nombre", "correo", "password", "estado", "rol_id" })
 public class UsuarioEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "id_user")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long codigo;
-    @Column(name = "nombre")
+    @Column(name = "nombre_usr")
     private String nombre;
+    @Column(name = "correo")
     private String correo;
-    private String contraseña;
+    @Column(name = "password")
+    private String password;
+    @Column(name = "estado")
     private String estado;
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
-    private RolEntity rolid;
+    @JoinColumn(name = "rol_id", nullable = false)
+    private RolEntity rol_id;
 }
