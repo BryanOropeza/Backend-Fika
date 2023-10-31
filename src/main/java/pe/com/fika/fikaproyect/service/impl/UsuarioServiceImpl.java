@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import pe.com.fika.fikaproyect.dto.UsuarioDTO;
+import pe.com.fika.fikaproyect.model.LoginRequest;
 import pe.com.fika.fikaproyect.model.UsuarioEntity;
 import pe.com.fika.fikaproyect.repository.UsuarioRepository;
 import pe.com.fika.fikaproyect.service.UsuarioService;
@@ -55,14 +56,34 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public UsuarioDTO delete(Long id) {
         UsuarioEntity user = repositorio.findById(id).get();
-        user.setEstado("Eliminado");
+        user.setEstate("Eliminado");
         return mapper.map(repositorio.save(user), UsuarioDTO.class);
     }
 
     @Override
     public UsuarioDTO enable(Long id) {
         UsuarioEntity user = repositorio.findById(id).get();
-        user.setEstado("Inhabilitado");
+        user.setEstate("Inhabilitado");
         return mapper.map(repositorio.save(user), UsuarioDTO.class);
     }
+
+    @Override
+    public UsuarioDTO login(LoginRequest loginRequest) {
+        // Obtén el nombre de usuario y la contraseña desde el objeto LoginRequest.
+        String username = loginRequest.getUser();
+        String password = loginRequest.getPassword();
+
+        // Realiza la lógica de validación de credenciales utilizando la consulta login
+        // en el repositorio.
+        UsuarioEntity usuario = repositorio.login(username, password);
+
+        if (usuario != null) {
+            // Utiliza ModelMapper u otra técnica para mapear la entidad a DTO.
+            UsuarioDTO usuarioDTO = mapper.map(usuario, UsuarioDTO.class);
+            return usuarioDTO;
+        }
+
+        return null; // Devuelve null si las credenciales son incorrectas o el usuario no existe.
+    }
+
 }
