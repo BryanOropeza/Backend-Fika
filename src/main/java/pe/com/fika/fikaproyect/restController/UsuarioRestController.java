@@ -41,9 +41,13 @@ public class UsuarioRestController {
     }
 
     @PostMapping
-    public UsuarioDTO add(@RequestBody UsuarioDTO c) {
-        return servicio.add(c);
-
+    public ResponseEntity<UsuarioDTO> add(@RequestBody UsuarioDTO c) {
+        try {
+            UsuarioDTO nuevoUsuario = servicio.add(c);
+            return ResponseEntity.ok(nuevoUsuario);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(c);
+        }
     }
 
     @PutMapping("{id}")
@@ -78,5 +82,16 @@ public class UsuarioRestController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // Devuelve el código 401 si las credenciales son
                                                                   // incorrectas.
         }
+    }
+
+    // validacion de Registros
+    @GetMapping("/checkUser/{username}")
+    public boolean checkUserExists(@PathVariable String username) {
+        return servicio.existsByUsername(username);
+    }
+
+    @GetMapping("/checkEmail/{email}")
+    public boolean checkEmailExists(@PathVariable String email) {
+        return servicio.existsByEmail(email);
     }
 }

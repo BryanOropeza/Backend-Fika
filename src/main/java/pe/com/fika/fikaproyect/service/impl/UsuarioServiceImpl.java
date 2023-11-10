@@ -41,9 +41,10 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public UsuarioDTO add(UsuarioDTO t) {
-        UsuarioEntity user = mapper.map(t, UsuarioEntity.class);
-        return mapper.map(repositorio.save(user), UsuarioDTO.class);
+    public UsuarioDTO add(UsuarioDTO usuarioDTO) {
+        // Si las verificaciones pasan, procede a agregar el usuario
+        UsuarioEntity userEntity = mapper.map(usuarioDTO, UsuarioEntity.class);
+        return mapper.map(repositorio.save(userEntity), UsuarioDTO.class);
     }
 
     @Override
@@ -84,6 +85,16 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
 
         return null; // Devuelve null si las credenciales son incorrectas o el usuario no existe.
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return repositorio.existsByUser(username);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return repositorio.existsByEmail(email);
     }
 
 }
