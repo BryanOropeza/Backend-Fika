@@ -17,10 +17,12 @@ import pe.com.fika.fikaproyect.model.UsuarioEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@JsonPropertyOrder({ "codigo", "nombre", "apellido", "direccion", "telefono", "fechanacimiento", "estado", "sexo",
-        "observaciones", "usuario_id" })
+@JsonPropertyOrder({ "codigo", "dni", "nombre", "apellido", "direccion", "telefono", "fechanacimiento", "estado",
+        "sexo",
+        "observaciones" })
 public class PacienteDTO extends GenericoDTO {
     private String nombre;
+    private String dni;
     private String apellido;
     private String direccion;
     private String telefono;
@@ -28,5 +30,4 @@ public class PacienteDTO extends GenericoDTO {
     private String estado;
     private String sexo;
     private String observaciones;
-    private UsuarioEntity usuario_id;
 }

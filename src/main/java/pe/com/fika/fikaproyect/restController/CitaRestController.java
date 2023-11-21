@@ -1,5 +1,6 @@
 package pe.com.fika.fikaproyect.restController;
 
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -55,5 +56,10 @@ public class CitaRestController {
     @PutMapping("enable/{id}")
     public CitaDTO enable(@PathVariable long id) {
         return servicio.enable(id);
+    }
+
+    @GetMapping("/checkDate/{date}")
+    public boolean checkDateExists(@PathVariable Date date) {
+        return servicio.existsByDate(date);
     }
 }

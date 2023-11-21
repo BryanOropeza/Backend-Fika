@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = false)
-@JsonPropertyOrder({ "idcita", "fechahora", "tratamiento", "estado", "pacienteid" })
+@JsonPropertyOrder({ "codigo", "fechahora", "tratamiento", "estado", "pacienteid" })
 @Entity(name = "CitaEntity")
 @Table(name = "cita")
 public class CitaEntity implements Serializable {

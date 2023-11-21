@@ -1,5 +1,6 @@
 package pe.com.fika.fikaproyect.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -64,5 +65,10 @@ public class CitaServiceImpl implements CitaService {
         CitaEntity cita = repositorio.findById(id).get();
         cita.setEstado("Inhabilitado");
         return mapper.map(repositorio.save(cita), CitaDTO.class);
+    }
+
+    @Override
+    public boolean existsByDate(Date date) {
+        return repositorio.existsByDate(date);
     }
 }
