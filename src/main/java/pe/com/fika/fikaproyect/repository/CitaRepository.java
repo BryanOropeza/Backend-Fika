@@ -16,4 +16,7 @@ public interface CitaRepository extends JpaRepository<CitaEntity, Long> {
 
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM CitaEntity c WHERE c.fechahora = :date")
     boolean existsByDate(@Param("date") Date date);
+
+    @Query("SELECT CASE WHEN :date < CURRENT_DATE THEN true ELSE false END FROM CitaEntity")
+    boolean isDateOutOfTime(@Param("date") Date date);
 }

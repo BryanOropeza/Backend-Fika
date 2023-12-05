@@ -11,6 +11,7 @@ import pe.com.fika.fikaproyect.service.UsuarioService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository repositorio;
+
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     private ModelMapper mapper;
@@ -40,9 +43,23 @@ public class UsuarioServiceImpl implements UsuarioService {
         return mapper.map(lista, UsuarioDTO.class);
     }
 
+    /*
+     * @Override
+     * public UsuarioDTO add(UsuarioDTO usuarioDTO) {
+     * // Si las verificaciones pasan, procede a agregar el usuario
+     * UsuarioEntity userEntity = mapper.map(usuarioDTO, UsuarioEntity.class);
+     * return mapper.map(repositorio.save(userEntity), UsuarioDTO.class);
+     * }
+     */
+
     @Override
     public UsuarioDTO add(UsuarioDTO usuarioDTO) {
         // Si las verificaciones pasan, procede a agregar el usuario
+
+        // Encriptar la contraseña antes de guardarla
+        String contraseñaEncriptada = passwordEncoder.encode(usuarioDTO.getPassword());
+        usuarioDTO.setPassword(contraseñaEncriptada);
+
         UsuarioEntity userEntity = mapper.map(usuarioDTO, UsuarioEntity.class);
         return mapper.map(repositorio.save(userEntity), UsuarioDTO.class);
     }

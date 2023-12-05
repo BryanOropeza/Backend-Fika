@@ -9,4 +9,6 @@ public interface CitaService extends GenericoService<CitaDTO> {
 
     boolean existsByDate(Date date);
 
+    boolean isDateOutOfTime(Date Time);
+
 }

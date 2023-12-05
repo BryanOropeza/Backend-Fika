@@ -62,4 +62,9 @@ public class CitaRestController {
     public boolean checkDateExists(@PathVariable Date date) {
         return servicio.existsByDate(date);
     }
+
+    @GetMapping("/checkDateOutOfTime/{date}")
+    public boolean isDateOutOfTime(@PathVariable Date date) {
+        return servicio.isDateOutOfTime(date);
+    }
 }

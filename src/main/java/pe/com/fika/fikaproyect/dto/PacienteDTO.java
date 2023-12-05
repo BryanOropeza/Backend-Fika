@@ -10,7 +10,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import pe.com.fika.fikaproyect.dto.generico.GenericoDTO;
-import pe.com.fika.fikaproyect.model.UsuarioEntity;
 
 @SuperBuilder
 @Data
