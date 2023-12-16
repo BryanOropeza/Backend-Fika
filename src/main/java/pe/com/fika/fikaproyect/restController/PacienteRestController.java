@@ -2,6 +2,8 @@ package pe.com.fika.fikaproyect.restController;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +42,13 @@ public class PacienteRestController {
     @PostMapping
     public PacienteDTO add(@RequestBody PacienteDTO c) {
         return servicio.add(c);
+    }
+
+    @PostMapping("/{usuarioId}")
+    public ResponseEntity<PacienteDTO> crearPaciente(@PathVariable Long usuarioId,
+            @RequestBody PacienteDTO pacienteDTO) {
+        PacienteDTO nuevoPaciente = servicio.crearPaciente(usuarioId, pacienteDTO);
+        return new ResponseEntity<>(nuevoPaciente, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")

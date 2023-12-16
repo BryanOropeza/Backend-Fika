@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import pe.com.fika.fikaproyect.dto.UsuarioDTO;
 import pe.com.fika.fikaproyect.model.LoginRequest;
+import pe.com.fika.fikaproyect.model.ResetPasswordRequest;
 import pe.com.fika.fikaproyect.service.UsuarioService;
 
 @RestController
@@ -93,5 +94,15 @@ public class UsuarioRestController {
     @GetMapping("/checkEmail/{email}")
     public boolean checkEmailExists(@PathVariable String email) {
         return servicio.existsByEmail(email);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<UsuarioDTO> resetPassword(@RequestBody ResetPasswordRequest resetRequest) {
+        try {
+            UsuarioDTO usuarioActualizado = servicio.resetPassword(resetRequest);
+            return ResponseEntity.ok(usuarioActualizado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }

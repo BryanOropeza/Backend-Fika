@@ -2,6 +2,7 @@ package pe.com.fika.fikaproyect.model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import jakarta.persistence.Column;
@@ -11,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Entity(name = "UsuarioEntity")
 @Table(name = "usuario")
 @EqualsAndHashCode(callSuper = false)
-@JsonPropertyOrder({ "codigo", "user", "email", "password", "estate", "rol_id" })
+@JsonPropertyOrder({ "codigo", "user", "email", "password", "estate", "rol_id", "paciente" })
 public class UsuarioEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -44,4 +46,9 @@ public class UsuarioEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "rol_id", nullable = false)
     private RolEntity rol_id;
+
+    @JsonBackReference
+    @OneToOne(mappedBy = "usuario")
+    private PacienteEntity paciente;
+
 }

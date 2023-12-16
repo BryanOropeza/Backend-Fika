@@ -3,13 +3,17 @@ package pe.com.fika.fikaproyect.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +27,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonPropertyOrder({
         "codigo", "dni", "nombre", "apellido", "direccion", "telefono", "fechanacimiento", "estado", "sexo",
-        "observaciones" })
+        "observaciones", "usuario" })
 @EqualsAndHashCode(callSuper = false)
 @Entity(name = "PacienteEntity")
 @Table(name = "paciente")
@@ -51,5 +55,10 @@ public class PacienteEntity implements Serializable {
     private String sexo;
     @Column(name = "observaciones")
     private String observaciones;
+
+    @JsonManagedReference
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id_user")
+    private UsuarioEntity usuario;
 
 }

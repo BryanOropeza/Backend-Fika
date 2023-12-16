@@ -1,11 +1,14 @@
 package pe.com.fika.fikaproyect.service.impl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import pe.com.fika.fikaproyect.dto.PacienteDTO;
 import pe.com.fika.fikaproyect.model.PacienteEntity;
+import pe.com.fika.fikaproyect.model.UsuarioEntity;
 import pe.com.fika.fikaproyect.repository.PacienteRepository;
+import pe.com.fika.fikaproyect.repository.UsuarioRepository;
 import pe.com.fika.fikaproyect.service.PacienteService;
 
 import org.modelmapper.ModelMapper;
@@ -19,7 +22,22 @@ public class PacienteServiceImpl implements PacienteService {
     private PacienteRepository repositorio;
 
     @Autowired
+    private UsuarioRepository usuarioRepositorio;
+
+    @Autowired
     private ModelMapper mapper;
+
+    @Override
+    public PacienteDTO crearPaciente(Long usuarioId, PacienteDTO pacienteDTO) {
+        UsuarioEntity usuario = usuarioRepositorio.findById(usuarioId)
+                .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
+
+        PacienteEntity paciente = mapper.map(pacienteDTO, PacienteEntity.class);
+        paciente.setUsuario(usuario);
+
+        PacienteEntity pacienteGuardado = repositorio.save(paciente);
+        return mapper.map(pacienteGuardado, PacienteDTO.class);
+    }
 
     @Override
     public List<PacienteDTO> findAll() {

@@ -22,4 +22,6 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
     @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM UsuarioEntity u WHERE u.user = :user")
     boolean existsByUser(@Param("user") String user);
 
+    @Query("SELECT u FROM UsuarioEntity u WHERE u.user = :username")
+    UsuarioEntity findByUsername(@Param("username") String username);
 }

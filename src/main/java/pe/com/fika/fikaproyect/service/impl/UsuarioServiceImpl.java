@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import pe.com.fika.fikaproyect.dto.UsuarioDTO;
 import pe.com.fika.fikaproyect.model.LoginRequest;
+import pe.com.fika.fikaproyect.model.ResetPasswordRequest;
 import pe.com.fika.fikaproyect.model.UsuarioEntity;
 import pe.com.fika.fikaproyect.repository.UsuarioRepository;
 import pe.com.fika.fikaproyect.service.UsuarioService;
@@ -43,25 +44,33 @@ public class UsuarioServiceImpl implements UsuarioService {
         return mapper.map(lista, UsuarioDTO.class);
     }
 
-    /*
-     * @Override
-     * public UsuarioDTO add(UsuarioDTO usuarioDTO) {
-     * // Si las verificaciones pasan, procede a agregar el usuario
-     * UsuarioEntity userEntity = mapper.map(usuarioDTO, UsuarioEntity.class);
-     * return mapper.map(repositorio.save(userEntity), UsuarioDTO.class);
-     * }
-     */
-
     @Override
     public UsuarioDTO add(UsuarioDTO usuarioDTO) {
-        // Si las verificaciones pasan, procede a agregar el usuario
-
         // Encriptar la contraseña antes de guardarla
         String contraseñaEncriptada = passwordEncoder.encode(usuarioDTO.getPassword());
         usuarioDTO.setPassword(contraseñaEncriptada);
 
         UsuarioEntity userEntity = mapper.map(usuarioDTO, UsuarioEntity.class);
         return mapper.map(repositorio.save(userEntity), UsuarioDTO.class);
+    }
+
+    @Override
+    public UsuarioDTO resetPassword(ResetPasswordRequest resetRequest) {
+        String username = resetRequest.getUser();
+        String newPassword = resetRequest.getPassword();
+
+        // Encuentra al usuario por su nombre de usuario
+        UsuarioEntity usuario = repositorio.findByUsername(username);
+
+        if (usuario != null) {
+            // Actualiza la contraseña del usuario
+            String contraseñaEncriptada = passwordEncoder.encode(newPassword);
+            usuario.setPassword(contraseñaEncriptada);
+            return mapper.map(repositorio.save(usuario), UsuarioDTO.class);
+        } else {
+            // Maneja el caso en el que el usuario no existe
+            throw new RuntimeException("Usuario no encontrado");
+        }
     }
 
     @Override
@@ -87,21 +96,26 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public UsuarioDTO login(LoginRequest loginRequest) {
-        // Obtén el nombre de usuario y la contraseña desde el objeto LoginRequest.
         String username = loginRequest.getUser();
         String password = loginRequest.getPassword();
 
-        // Realiza la lógica de validación de credenciales utilizando la consulta login
-        // en el repositorio.
-        UsuarioEntity usuario = repositorio.login(username, password);
+        UsuarioEntity usuario = repositorio.findByUsername(username);
 
         if (usuario != null) {
-            // Utiliza ModelMapper u otra técnica para mapear la entidad a DTO.
-            UsuarioDTO usuarioDTO = mapper.map(usuario, UsuarioDTO.class);
-            return usuarioDTO;
+            System.out.println("Usuario encontrado: " + usuario.getUser());
+
+            if (passwordEncoder.matches(password, usuario.getPassword())) {
+                System.out.println("Contraseña coincidente para el usuario: " + usuario.getUser());
+                UsuarioDTO usuarioDTO = mapper.map(usuario, UsuarioDTO.class);
+                return usuarioDTO;
+            } else {
+                System.out.println("Contraseña incorrecta para el usuario: " + usuario.getUser());
+            }
+        } else {
+            System.out.println("Usuario no encontrado");
         }
 
-        return null; // Devuelve null si las credenciales son incorrectas o el usuario no existe.
+        return null; // Asegúrate de devolver null si no se autentica correctamente.
     }
 
     @Override
