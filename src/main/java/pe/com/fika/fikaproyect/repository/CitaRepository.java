@@ -2,6 +2,7 @@ package pe.com.fika.fikaproyect.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,5 +19,5 @@ public interface CitaRepository extends JpaRepository<CitaEntity, Long> {
     boolean existsByDate(@Param("date") Date date);
 
     @Query("SELECT CASE WHEN :date < CURRENT_DATE THEN true ELSE false END FROM CitaEntity")
-    boolean isDateOutOfTime(@Param("date") Date date);
+    Optional<Boolean> isDateOutOfTime(@Param("date") Date date);
 }

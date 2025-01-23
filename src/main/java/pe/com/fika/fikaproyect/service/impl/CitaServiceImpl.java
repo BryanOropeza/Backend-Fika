@@ -74,6 +74,7 @@ public class CitaServiceImpl implements CitaService {
 
     @Override
     public boolean isDateOutOfTime(Date date) {
-        return repositorio.isDateOutOfTime(date);
+        boolean result = repositorio.isDateOutOfTime(date).orElse(false);
+        return result;
     }
 }
