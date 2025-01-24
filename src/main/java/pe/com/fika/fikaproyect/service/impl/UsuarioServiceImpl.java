@@ -12,7 +12,7 @@ import pe.com.fika.fikaproyect.service.UsuarioService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -20,8 +20,6 @@ import org.springframework.stereotype.Service;
 public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository repositorio;
-
-    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     private ModelMapper mapper;
@@ -46,10 +44,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public UsuarioDTO add(UsuarioDTO usuarioDTO) {
-        // Encriptar la contraseña antes de guardarla
-        String contraseñaEncriptada = passwordEncoder.encode(usuarioDTO.getPassword());
-        usuarioDTO.setPassword(contraseñaEncriptada);
-
+        // Guardar la contraseña tal como viene (sin encriptación)
         UsuarioEntity userEntity = mapper.map(usuarioDTO, UsuarioEntity.class);
         return mapper.map(repositorio.save(userEntity), UsuarioDTO.class);
     }
@@ -63,9 +58,8 @@ public class UsuarioServiceImpl implements UsuarioService {
         UsuarioEntity usuario = repositorio.findByUsername(username);
 
         if (usuario != null) {
-            // Actualiza la contraseña del usuario
-            String contraseñaEncriptada = passwordEncoder.encode(newPassword);
-            usuario.setPassword(contraseñaEncriptada);
+            // Actualiza la contraseña del usuario sin encriptarla
+            usuario.setPassword(newPassword); // Guardar la nueva contraseña tal como viene
             return mapper.map(repositorio.save(usuario), UsuarioDTO.class);
         } else {
             // Maneja el caso en el que el usuario no existe
@@ -104,7 +98,8 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (usuario != null) {
             System.out.println("Usuario encontrado: " + usuario.getUser());
 
-            if (passwordEncoder.matches(password, usuario.getPassword())) {
+            // Comparar contraseñas en texto plano (sin usar passwordEncoder)
+            if (password.equals(usuario.getPassword())) {
                 System.out.println("Contraseña coincidente para el usuario: " + usuario.getUser());
                 UsuarioDTO usuarioDTO = mapper.map(usuario, UsuarioDTO.class);
                 return usuarioDTO;
@@ -127,5 +122,4 @@ public class UsuarioServiceImpl implements UsuarioService {
     public boolean existsByEmail(String email) {
         return repositorio.existsByEmail(email);
     }
-
 }
