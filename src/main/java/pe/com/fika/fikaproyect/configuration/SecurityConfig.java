@@ -3,6 +3,7 @@ package pe.com.fika.fikaproyect.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.session.SessionRegistry;
@@ -22,18 +23,34 @@ public class SecurityConfig {
                     auth.anyRequest().authenticated();
                 })
                 .formLogin(login -> login
-                        .successHandler(successHandler())
                         .permitAll())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                        .invalidSessionUrl("/fika/usuario/login")
-                        .maximumSessions(1)
-                        .expiredUrl("/fika/usuario/login")
-                        .sessionRegistry(sessionRegistry()))
-                .sessionManagement(sessionM -> sessionM
-                        .sessionFixation().migrateSession())
+                .httpBasic(withDefaults())
                 .build();
     }
+
+    /*
+     * @Bean
+     * public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws
+     * Exception {
+     * return httpSecurity
+     * .authorizeHttpRequests(auth -> {
+     * auth.requestMatchers("paciente", "citas").permitAll();
+     * auth.anyRequest().authenticated();
+     * })
+     * .formLogin(login -> login
+     * .successHandler(successHandler())
+     * .permitAll())
+     * .sessionManagement(session -> session
+     * .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+     * .invalidSessionUrl("/fika/usuario/login")
+     * .maximumSessions(1)
+     * .expiredUrl("/fika/usuario/login")
+     * .sessionRegistry(sessionRegistry()))
+     * .sessionManagement(sessionM -> sessionM
+     * .sessionFixation().migrateSession())
+     * .build();
+     * }
+     */
 
     @Bean
     public SessionRegistry sessionRegistry() {
