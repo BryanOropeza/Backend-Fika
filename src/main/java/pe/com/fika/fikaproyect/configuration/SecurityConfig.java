@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -26,15 +28,21 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                         .invalidSessionUrl("/fika/usuario/login")
                         .maximumSessions(1)
-                        .expiredUrl("/fika/usuario/login"))
-                .sessionManagement(session -> session
+                        .expiredUrl("/fika/usuario/login")
+                        .sessionRegistry(sessionRegistry()))
+                .sessionManagement(sessionM -> sessionM
                         .sessionFixation().migrateSession())
                 .build();
     }
 
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
     public AuthenticationSuccessHandler successHandler() {
         return ((request, response, authentication) -> {
-            response.sendRedirect("/fika/usuario/custom");
+            response.sendRedirect("/fika/usuario/session");
         });
     }
 

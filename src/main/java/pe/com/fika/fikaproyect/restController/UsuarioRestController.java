@@ -1,9 +1,15 @@
 package pe.com.fika.fikaproyect.restController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +31,9 @@ import pe.com.fika.fikaproyect.service.UsuarioService;
 public class UsuarioRestController {
     @Autowired
     private UsuarioService servicio;
+
+    @Autowired
+    private SessionRegistry sessionRegistry;
 
     @GetMapping
     public List<UsuarioDTO> findAll() {
@@ -104,5 +113,33 @@ public class UsuarioRestController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @GetMapping("/session")
+    public ResponseEntity<?> getDetailsSession() {
+
+        String sessionId = "";
+        User userObject = null;
+
+        List<Object> sessions = sessionRegistry.getAllPrincipals();
+
+        for (Object session : sessions) {
+            if (session instanceof User) {
+                userObject = (User) session;
+            }
+
+            List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(session, false);
+
+            for (SessionInformation sessionInformation : sessionInformations) {
+                sessionId = sessionInformation.getSessionId();
+            }
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("response", "Hello World");
+        response.put("sessionId", sessionId);
+        response.put("SessionUser", userObject);
+
+        return ResponseEntity.ok(response);
     }
 }
