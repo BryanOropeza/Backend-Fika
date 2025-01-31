@@ -65,7 +65,7 @@ public class UsuarioEntity implements Serializable {
 
     @ManyToMany(fetch = FetchType.EAGER, targetEntity = RolEntity.class, cascade = CascadeType.PERSIST)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
-    private Set<RolEntity> rol_id;
+    private Set<RolEntity> roles;
 
     @JsonBackReference
     @OneToOne(mappedBy = "usuario")
