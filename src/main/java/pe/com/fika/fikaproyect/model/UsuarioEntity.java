@@ -14,6 +14,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,13 +37,24 @@ public class UsuarioEntity implements Serializable {
     @Column(name = "id_user")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long codigo;
+
     @Column(name = "nombre_usr")
+    @NotBlank
+    @Size(max = 80)
     private String user;
+
     @Column(name = "correo")
+    @Email
+    @NotBlank
+    @Size(max = 80)
     private String email;
+
     @Column(name = "password")
+    @NotBlank
     private String password;
+
     @Column(name = "estado")
+    @NotBlank
     private String estate;
 
     @ManyToOne

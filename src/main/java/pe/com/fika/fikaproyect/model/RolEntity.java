@@ -6,10 +6,14 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,8 +34,11 @@ public class RolEntity implements Serializable {
     @Column(name = "id_rol")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long codigo;
+
     @Column(name = "nombre")
-    private String nombre;
+    @Enumerated(EnumType.STRING)
+    private ERole nombre;
+
     @Column(name = "est_rol")
     private String estado;
 }
