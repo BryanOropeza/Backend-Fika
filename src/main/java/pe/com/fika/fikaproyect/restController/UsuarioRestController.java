@@ -90,6 +90,7 @@ public class UsuarioRestController {
                 .roles(roles)
                 .paciente(createUserDTO.getPaciente())
                 .build();
+        // Prueba
 
         usuarioRepository.save(usuarioEntity);
 
