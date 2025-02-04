@@ -15,18 +15,21 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("paciente", "citas").permitAll();
-                    auth.anyRequest().authenticated();
-                })
-                .formLogin(login -> login
-                        .permitAll())
-                .httpBasic(withDefaults())
-                .build();
-    }
+    /*
+     * @Bean
+     * public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws
+     * Exception {
+     * return httpSecurity
+     * .authorizeHttpRequests(auth -> {
+     * auth.requestMatchers("paciente", "citas").permitAll();
+     * auth.anyRequest().authenticated();
+     * })
+     * .formLogin(login -> login
+     * .permitAll())
+     * .httpBasic(withDefaults())
+     * .build();
+     * }
+     */
 
     /*
      * @Bean
@@ -52,15 +55,25 @@ public class SecurityConfig {
      * }
      */
 
-    @Bean
-    public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
-    }
+    /*
+     * @Bean
+     * public SessionRegistry sessionRegistry() {
+     * return new SessionRegistryImpl();
+     * }
+     * 
+     * public AuthenticationSuccessHandler successHandler() {
+     * return ((request, response, authentication) -> {
+     * response.sendRedirect("/fika/usuario/session");
+     * });
+     * }
+     */
 
-    public AuthenticationSuccessHandler successHandler() {
-        return ((request, response, authentication) -> {
-            response.sendRedirect("/fika/usuario/session");
-        });
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+
+        return httpSecurity
+
+                .build();
     }
 
 }
