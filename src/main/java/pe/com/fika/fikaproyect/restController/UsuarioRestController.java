@@ -1,17 +1,10 @@
 package pe.com.fika.fikaproyect.restController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.session.SessionInformation;
-import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,14 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
 import pe.com.fika.fikaproyect.dto.UsuarioDTO;
-import pe.com.fika.fikaproyect.model.ERole;
+
 import pe.com.fika.fikaproyect.model.LoginRequest;
 import pe.com.fika.fikaproyect.model.ResetPasswordRequest;
-import pe.com.fika.fikaproyect.model.RolEntity;
-import pe.com.fika.fikaproyect.model.UsuarioEntity;
-import pe.com.fika.fikaproyect.repository.UsuarioRepository;
 import pe.com.fika.fikaproyect.service.UsuarioService;
 
 @RestController
@@ -38,13 +27,7 @@ import pe.com.fika.fikaproyect.service.UsuarioService;
 public class UsuarioRestController {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
     private UsuarioService servicio;
-
-    @Autowired
-    private SessionRegistry sessionRegistry;
 
     @GetMapping
     public List<UsuarioDTO> findAll() {
@@ -70,31 +53,6 @@ public class UsuarioRestController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(c);
         }
-    }
-
-    // Crear usuario - Prueba Spring Security
-    @PostMapping("/createUser")
-    public ResponseEntity<?> createUser(@Valid @RequestBody UsuarioDTO createUserDTO) {
-
-        Set<RolEntity> roles = createUserDTO.getRoles().stream()
-                .map(rol -> RolEntity.builder()
-                        .nombre(ERole.valueOf(rol))
-                        .build())
-                .collect(Collectors.toSet());
-
-        UsuarioEntity usuarioEntity = UsuarioEntity.builder()
-                .user(createUserDTO.getUser())
-                .email(createUserDTO.getEmail())
-                .password(createUserDTO.getPassword())
-                .estate(createUserDTO.getEstate())
-                .roles(roles)
-                .paciente(createUserDTO.getPaciente())
-                .build();
-        // Prueba
-
-        usuarioRepository.save(usuarioEntity);
-
-        return ResponseEntity.ok(usuarioEntity);
     }
 
     @PutMapping("{id}")
@@ -152,32 +110,4 @@ public class UsuarioRestController {
         }
     }
 
-    // PRUEBA SPRING SECURITY
-    @GetMapping("/session")
-    public ResponseEntity<?> getDetailsSession() {
-
-        String sessionId = "";
-        User userObject = null;
-
-        List<Object> sessions = sessionRegistry.getAllPrincipals();
-
-        for (Object session : sessions) {
-            if (session instanceof User) {
-                userObject = (User) session;
-            }
-
-            List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(session, false);
-
-            for (SessionInformation sessionInformation : sessionInformations) {
-                sessionId = sessionInformation.getSessionId();
-            }
-        }
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("response", "Hello World");
-        response.put("sessionId", sessionId);
-        response.put("SessionUser", userObject);
-
-        return ResponseEntity.ok(response);
-    }
 }

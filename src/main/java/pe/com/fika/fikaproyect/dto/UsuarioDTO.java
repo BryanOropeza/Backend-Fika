@@ -12,14 +12,13 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import pe.com.fika.fikaproyect.dto.generico.GenericoDTO;
-import pe.com.fika.fikaproyect.model.PacienteEntity;
 
 @SuperBuilder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@JsonPropertyOrder({ "codigo", "user", "email", "password", "estate", "rol_id", "paciente" })
+@JsonPropertyOrder({ "codigo", "user", "email", "password", "estate", "rol_id", "pacienteId" })
 public class UsuarioDTO extends GenericoDTO {
     private String user;
 
@@ -29,6 +28,6 @@ public class UsuarioDTO extends GenericoDTO {
     private String password;
     private String estate;
     private Set<String> roles;
-    private PacienteEntity paciente;
+    private Long pacienteId;
 
 }

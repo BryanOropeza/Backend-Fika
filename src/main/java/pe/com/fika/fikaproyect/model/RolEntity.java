@@ -12,8 +12,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,6 +37,6 @@ public class RolEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private ERole nombre;
 
-    @Column(name = "est_rol")
+    @Column(name = "est_rol", nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'ACTIVO'")
     private String estado;
 }

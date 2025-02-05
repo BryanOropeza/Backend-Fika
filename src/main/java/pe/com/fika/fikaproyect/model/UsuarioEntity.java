@@ -14,10 +14,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinColumns;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
@@ -60,15 +58,14 @@ public class UsuarioEntity implements Serializable {
     private String password;
 
     @Column(name = "estado")
-    @NotBlank
     private String estate;
 
     @ManyToMany(fetch = FetchType.EAGER, targetEntity = RolEntity.class, cascade = CascadeType.PERSIST)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
     private Set<RolEntity> roles;
 
-    @JsonBackReference
-    @OneToOne(mappedBy = "usuario")
+    @OneToOne
+    @JoinColumn(name = "paciente_id", referencedColumnName = "id_paciente")
     private PacienteEntity paciente;
 
 }
